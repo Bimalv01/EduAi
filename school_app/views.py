@@ -1018,6 +1018,7 @@ def generate_token_and_uid(student_id):
     uid = base64.urlsafe_b64encode(str(student_id).encode()).decode()
 
     return token, uid
+#https://eduai-g6oj.onrender.com
 
 def password_reset_request(request):
     if request.method == "POST":
