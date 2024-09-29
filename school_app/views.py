@@ -1028,7 +1028,7 @@ def password_reset_request(request):
             try:
                 student = Student.objects.get(email=email)
                 token, uid = generate_token_and_uid(student.pk)
-                reset_link = f"http://127.0.0.1:8000/reset-password/{uid}/{token}/"
+                reset_link = f"http://eduai-g6oj.onrender.com/reset-password/{uid}/{token}/"
                 
                 send_mail(
                     'Password Reset Request',
