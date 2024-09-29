@@ -1,0 +1,98 @@
+<!-- approval.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Approval</title>
+    <!-- Add any additional stylesheets or styling here -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .approve-btn, .reject-btn {
+            padding: 8px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .reject-btn {
+            background-color: #f44336;
+        }
+    </style>
+</head>
+<body>
+    <a href="{% url 'upload' %}">Back</a>
+    <h2>Student Approval</h2>
+
+    {% if students %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Student ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Parent Contact</th>
+                    <th>Parent Name</th>
+                    <th>Course</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                    <tr>
+                        
+                        <td>{{ student.id }}</td>
+                        <td>{{ student.name }}</td>
+                        <td>{{ student.email }}</td>
+                        <td>{{ student.parent_contact}}</td>
+                        <td>{{ student.parent_name}}
+                        <td>{{ student.course}}</td>
+
+
+                        <td>
+                            <form method="post" action="{% url 'approval' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="student_id" value="{{ student.id }}">
+                                <button type="submit" name="action" value="approve" class="approve-btn">Approve</button>
+                                <button type="submit" name="action" value="reject" class="reject-btn">Reject</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No students awaiting approval.</p>
+    {% endif %}
+</body>
+</html>

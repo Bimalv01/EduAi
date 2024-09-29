@@ -1,0 +1,106 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher List - Admin Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding-top: 60px;
+        }
+
+        .teacher-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .teacher-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar {
+            margin-bottom: 30px;
+        }
+
+        .form-select, .btn {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'upload' %}">Admin Dashboard</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <span class="navbar-text me-3">Hello, Admin</span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-outline-light me-3" href="{% url 'register_teacher' %}">Register Teacher</a> <!-- Register Teacher Button -->
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-outline-light" href="{% url 'logout' %}">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h2 class="text-center mb-4">Teacher List</h2>
+        
+        <!-- Filter Form -->
+        <form class="d-flex mb-4" method="get" action="">
+            <label for="department" class="form-label me-2">Filter by Department:</label>
+            <select name="department" id="department" class="form-select me-2" style="width: auto;">
+                <option value="">All</option>
+                {% for code, name in department_choices %}
+                    <option value="{{ code }}" {% if request.GET.department == code %}selected{% endif %}>{{ name }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </form>
+
+        <!-- Teacher Cards -->
+        <div class="row">
+            {% for teacher_score in teacher_scores %}
+                <div class="col-md-4 mb-4">
+                    <div class="card teacher-card h-100">
+                        {% if teacher_score.teacher.profile_picture %}
+                            <img src="{{ teacher_score.teacher.profile_picture.url }}" class="card-img-top" alt="{{ teacher_score.teacher.name }}" style="height: 200px; object-fit: cover;">
+                        {% else %}
+                            <img src="{% static 'images/default-profile.png' %}" class="card-img-top" alt="Default Profile" style="height: 200px; object-fit: cover;">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ teacher_score.teacher.name }}</h5>
+                            <p class="card-text">
+                                <strong>Email:</strong> {{ teacher_score.teacher.email }}<br>
+                                <strong>Contact:</strong> {{ teacher_score.teacher.contact_number }}<br>
+                                <strong>Department:</strong> {{ teacher_score.teacher.get_department_display }}<br>
+                                <strong>Gender:</strong> {{ teacher_score.teacher.get_gender_display }}<br>
+                                <strong>Performance Score:</strong> {{ teacher_score.avg_performance_score|floatformat:2 }}<br>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-center">No teachers found.</p>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

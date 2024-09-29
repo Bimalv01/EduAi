@@ -1,0 +1,74 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Download</title>
+    <style>
+        .body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .image-container {
+            display: flex;
+            flex-wrap: wrap; /* Allow items to wrap onto the next line */
+        }
+
+        .image-item {
+            flex: 1;
+            margin: 10px;
+            text-align: center;
+            max-width: calc(33.33% - 20px); /* Set the maximum width for 3 items in a row */
+            padding: 10px;
+        }
+
+        .image-item img {
+            width: 100%;
+            height: auto;
+        }
+
+        {% comment %} .card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            margin: 10px;
+            text-align: left;
+            width: 300px;
+            height: 370px;
+        } {% endcomment %}
+    </style>
+</head>
+<body>
+    <div class="body">
+   
+    <div class="image-container">
+        {% for i in data %}
+        <div class="image-item">
+            <div class="card">
+                <h2>Subject: {{ i.subject_name }}</h2>
+                <h2>Year: {{ i.year }}</h2>
+                <h2>course:{{i.course}}</h2>
+                <a href="{{ i.upload.url }}" >
+                    <img src="{{ i.upload.url }}">
+                </a>
+              
+               
+            </div>
+            
+            
+        </div>
+        
+            
+       
+        {% endfor %}
+    </div>
+</div>
+</body>
+

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Report</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <a href="{% url 'upload' %}" class="home-link">Home</a>
+    <div class="container mt-5">
+        <h2 class="mb-4">Student Report</h2>
+        <!-- Date Filter Form -->
+        <form method="GET" action="{% url 'student_report' %}" class="form-inline mb-4">
+            <div class="form-group mr-2">
+                <label for="start_date" class="mr-2">From:</label>
+                <input type="date" name="start_date" id="start_date" class="form-control" value="{{ request.GET.start_date }}">
+            </div>
+            <div class="form-group mr-2">
+                <label for="end_date" class="mr-2">To:</label>
+                <input type="date" name="end_date" id="end_date" class="form-control" value="{{ request.GET.end_date }}">
+            </div>
+              
+    <div class="form-group mr-2">
+        <label for="gender" class="mr-2">Gender:</label>
+        <select name="gender" id="gender" class="form-control">
+            <option value="">All</option>
+            <option value="M" {% if request.GET.gender == 'M' %}selected{% endif %}>Male</option>
+            <option value="F" {% if request.GET.gender == 'F' %}selected{% endif %}>Female</option>
+            <option value="O" {% if request.GET.gender == 'O' %}selected{% endif %}>Other</option>
+        </select>
+    </div>
+            <button type="submit" class="btn btn-primary">Filter</button>
+           
+                <a href="{% url 'download_csv' %}?start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}" class="btn btn-success">Download CSV</a>
+                <a href="{% url 'download_pdf' %}?start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}" class="btn btn-danger">Download PDF</a>
+
+        </form>
+       
+
+        <!-- Visualization Section -->
+        <div class="mb-4">
+            <h4>Number of Students Applied for Each Course</h4>
+            <canvas id="studentChart"></canvas>
+        </div>
+
+        <!-- Student Table -->
+        <table class="table table-striped table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Roll Number</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Parent Name</th>
+                    <th scope="col">Parent Contact</th>
+                    <th scope="col">Gender</th>
+                    <th scope="col">Course</th>
+                    <th scope="col">Date of Birth</th>
+                    <th scope="col">Registration Date</th>
+                    <th scope="col">Approval Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <td>{{ student.roll_number }}</td>
+                    <td>{{ student.name }}</td>
+                    <td>{{ student.email }}</td>
+                    <td>{{ student.parent_name }}</td>
+                    <td>{{ student.parent_contact }}</td>
+                    <td>{{ student.get_gender_display }}</td>
+                    <td>{{ student.get_course_display }}</td>
+                    <td>{{ student.date_of_birth }}</td>
+                    <td>{{ student.registration_date }}</td>
+                    <td>{{ student.is_approved|yesno:"Approved,Pending" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Download Options -->
+       
+    </div>
+
+    <!-- Chart.js Script -->
+    <script>
+        var ctx = document.getElementById('studentChart').getContext('2d');
+        var studentChart = new Chart(ctx, {
+            type: 'bar', // Change to 'pie' for a pie chart
+            data: {
+                labels: [{% for course, count in student_count_by_course.items %}"{{ course }}",{% endfor %}],
+                datasets: [{
+                    label: '# of Students',
+                    data: [{% for course, count in student_count_by_course.items %}{{ count }},{% endfor %}],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

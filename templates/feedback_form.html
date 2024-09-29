@@ -1,0 +1,89 @@
+{% extends "base2.html" %}
+
+{% block content %}
+<h2>Feedback Form</h2>
+{% if success_message %}
+    <p class="alert alert-success">{{ success_message }}</p>
+{% endif %}
+{% if error_message %}
+    <p class="alert alert-danger">{{ error_message }}</p>
+{% endif %}
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Teacher</th>
+            <th>Teaching Effectiveness</th>
+            <th>Clarity of Explanation</th>
+            <th>Engagement</th>
+            <th>Punctuality & Time Management</th>
+            <th>Interaction with Students</th>
+            <th>Feedback Support</th>
+            <th>Classroom Management</th>
+            <th>Teaching Aids & Technology</th>
+            <th>Positive Feedback</th>
+            <th>Areas for Improvement</th>
+            <th>Additional Comments</th>
+            <th>Submit Feedback</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for teacher in teachers %}
+        <tr>
+            <td>
+                <strong>{{ teacher.name }}</strong><br>
+                Email: <a href="mailto:{{ teacher.email }}">{{ teacher.email }}</a><br>
+                Contact: {{ teacher.contact_number }}
+            </td>
+            <form method="POST" class="mb-3">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+
+                <!-- Hidden input for teacher_id -->
+                <input type="hidden" name="teacher_id" value="{{ teacher.teacher_id }}">
+
+                <td>
+                    {{ form.teaching_effectiveness }}
+                </td>
+                <td>
+                    {{ form.clarity_of_explanation }}
+                </td>
+                <td>
+                    {{ form.engagement }}
+                </td>
+                <td>
+                    {{ form.punctuality_time_management }}
+                </td>
+                <td>
+                    {{ form.interaction_with_students }}
+                </td>
+                <td>
+                    {{ form.feedback_support }}
+                </td>
+                <td>
+                    {{ form.classroom_management }}
+                </td>
+                <td>
+                    {{ form.teaching_aids_technology }}
+                </td>
+                <td>
+                    {{ form.positive_feedback }}
+                </td>
+                <td>
+                    {{ form.areas_for_improvement }}
+                </td>
+                <td>
+                    {{ form.additional_comments }}
+                </td>
+                <td>
+                    <button type="submit" class="btn btn-primary">Submit Feedback</button>
+                </td>
+            </form>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="13" class="text-center">No teachers available for feedback.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

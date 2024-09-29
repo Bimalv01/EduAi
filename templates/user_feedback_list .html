@@ -1,0 +1,122 @@
+{% comment %} <!-- templates/feedback_list.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback List</title>
+</head>
+<body>
+    <h1>Feedback List</h1>
+    <table border="1">
+        <thead>
+            <tr>
+              
+                <th>Date</th>
+                <th>Feedback</th>
+                <th>Admin Reply</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for feedback in feedbacks %}
+                <tr>
+                   
+                    <td>{{ feedback.date }}</td>
+                    <td>{{ feedback.feedback }}</td>
+                    
+                    <td>
+                        {% if feedback.admin_reply == 'None'  or feedback.admin_reply is none  %}
+
+                           <p>no replay</p>
+                        {% else %}
+                            {{feedback.admin_reply}}
+                        {% endif %}
+                    </td>
+
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+</body>
+</html> {% endcomment %}
+
+
+<!-- templates/feedback_list.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback List</title>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        td p {
+            color: #888;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>Feedback List</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Feedback</th>
+                <th>Admin Reply</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for feedback in feedbacks %}
+                <tr>
+                    <td>{{ feedback.date }}</td>
+                    <td>{{ feedback.feedback }}</td>
+                    <td>
+                        {% if feedback.admin_reply == 'None' or feedback.admin_reply is none %}
+                            <p>No reply</p>
+                        {% else %}
+                            {{ feedback.admin_reply }}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
+

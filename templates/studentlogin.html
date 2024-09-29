@@ -1,0 +1,192 @@
+{% extends 'base1.html' %}
+{% load static %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        .body {
+            background-image: url('https://www.corporateschoolstsy.org/cst_banners/school_jpg_06Jul2021193148.jpg');
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 12px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .error {
+            color: red;
+        }
+
+        .success {
+            color: green;
+        }
+
+        .toggle-password {
+            background-color: #0074b8;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .toggle-password:hover {
+            background-color: #005689;
+        }
+    </style>
+</head>
+<body>
+    <div class="body">
+        <form method="post" action="{% url 'student_login' %}">
+            {% csrf_token %}
+            <label for="login_type">Login as:</label>
+            <select id="login_type" name="login_type" required>
+                <option value="student">Student</option>
+                <option value="teacher">Teacher</option>
+            </select>
+
+            {% if messages %}
+            <div class="{% if messages.tags %}{{ messages.tags }}{% else %}error{% endif %}">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {% endif %}
+            <!-- Student-specific fields -->
+            <div id="student-fields">
+                <label for="roll_number">Roll Number:</label>
+                <input type="text" id="roll_number" name="roll_number">
+            </div>
+
+            <!-- Teacher-specific fields -->
+            <div id="teacher-fields" style="display: none;">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username">
+            </div>
+
+            <label for="password">Password:</label>
+            <div style="position: relative;">
+                <input type="password" id="password" name="password" required>
+                <button type="button" class="toggle-password" onclick="togglePassword()">Show</button>
+            </div>
+            <br>
+            <center><button type="submit">Login</button></center>
+            <a href="{% url 'password_reset_request' %}" id="forgot-password-link">Forgot password?</a>
+        </form>
+       
+    </div>
+
+    <script>
+        // Toggle password visibility
+        function togglePassword() {
+            var passwordField = document.getElementById("password");
+            var toggleButton = document.querySelector(".toggle-password");
+
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                toggleButton.textContent = "Hide";
+            } else {
+                passwordField.type = "password";
+                toggleButton.textContent = "Show";
+            }
+        }
+
+        // Toggle between student and teacher fields
+        document.getElementById('login_type').addEventListener('change', function() {
+            var loginType = this.value;
+            var studentFields = document.getElementById('student-fields');
+            var teacherFields = document.getElementById('teacher-fields');
+
+            if (loginType === 'student') {
+                studentFields.style.display = 'block';
+                teacherFields.style.display = 'none';
+            } else if (loginType === 'teacher') {
+                studentFields.style.display = 'none';
+                teacherFields.style.display = 'block';
+            }
+        });
+
+        // Set initial state based on the default selected value
+        document.getElementById('login_type').dispatchEvent(new Event('change'));
+
+         // Toggle password visibility
+    function togglePassword() {
+        var passwordField = document.getElementById("password");
+        var toggleButton = document.querySelector(".toggle-password");
+
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            toggleButton.textContent = "Hide";
+        } else {
+            passwordField.type = "password";
+            toggleButton.textContent = "Show";
+        }
+    }
+
+    // Toggle between student and teacher fields and control forgot password link visibility
+    document.getElementById('login_type').addEventListener('change', function() {
+        var loginType = this.value;
+        var studentFields = document.getElementById('student-fields');
+        var teacherFields = document.getElementById('teacher-fields');
+        var forgotPasswordLink = document.getElementById('forgot-password-link');
+
+        if (loginType === 'student') {
+            studentFields.style.display = 'block';
+            teacherFields.style.display = 'none';
+            forgotPasswordLink.style.display = 'inline'; // Show forgot password link for students
+        } else if (loginType === 'teacher') {
+            studentFields.style.display = 'none';
+            teacherFields.style.display = 'block';
+            forgotPasswordLink.style.display = 'none'; // Hide forgot password link for teachers
+        }
+    });
+
+    // Set initial state based on the default selected value
+    document.getElementById('login_type').dispatchEvent(new Event('change'));
+    </script>
+    
+</body>
+{% endblock %}

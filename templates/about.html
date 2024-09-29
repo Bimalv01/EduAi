@@ -1,0 +1,168 @@
+{%load static%} {% block elemnet %}
+<html>
+  <head>
+<style>
+    * {margin: 0; padding: 0;}
+
+    body {
+      background-color: lightblue;
+       }
+   #container {
+      width: 70%;
+        overflow: hidden;
+        margin: 50px auto;
+        background: white;
+        
+   }
+
+   /*header*/
+   header {
+       width: 800px;
+       margin: 40px auto;
+   }
+
+   header h1 {
+       text-align: center;
+       font: 100 60px/1.5 Helvetica, Verdana, sans-serif;
+
+   }
+
+   header p {
+       font: 100 15px/1.5 Helvetica, Verdana, sans-serif;
+       text-align: justify;
+   }
+
+   /*photobanner*/
+
+   .photobanner {
+       height: 450px;
+       width: 100%;
+       margin-bottom: -45px;
+   }
+
+   /*keyframe animations*/
+   .first {
+       -webkit-animation: bannermove 30s linear infinite;
+          -moz-animation: bannermove 30s linear infinite;
+           -ms-animation: bannermove 30s linear infinite;
+            -o-animation: bannermove 30s linear infinite;
+               animation: bannermove 30s linear infinite;
+   }
+
+   @keyframes "bannermove" {
+    0% {
+       margin-left: 0px;
+    }
+    100% {
+       margin-left: -2125px;
+    }
+
+   }
+
+   @-moz-keyframes bannermove {
+    0% {
+      margin-left: 0px;
+    }
+    100% {
+      margin-left: -2125px;
+    }
+
+   }
+
+   @-webkit-keyframes "bannermove" {
+    0% {
+      margin-left: 0px;
+    }
+    100% {
+      margin-left: -2125px;
+    }
+
+   }
+
+   @-ms-keyframes "bannermove" {
+    0% {
+      margin-left: 0px;
+    }
+    100% {
+      margin-left: -2125px;
+    }
+
+   }
+
+   @-o-keyframes "bannermove" {
+    0% {
+      margin-left: 0px;
+    }
+    100% {
+      margin-left: -2125px;
+    }
+
+   }
+
+
+
+   .photobanner img {
+       -webkit-transition: all 0.5s ease;
+       -moz-transition: all 0.5s ease;
+       -o-transition: all 0.5s ease;
+       -ms-transition: all 0.5s ease;
+       transition: all 0.5s ease;
+   }
+
+   .photobanner img:hover {
+       -webkit-transform: scale(1.1);
+       -moz-transform: scale(1.1);
+       -o-transform: scale(1.1);
+       -ms-transform: scale(1.1);
+       transform: scale(1.1);
+       cursor: pointer;
+
+       -webkit-box-shadow: 0px 3px 5px rgba(0,0,0,0.2);
+       -moz-box-shadow: 0px 3px 5px rgba(0,0,0,0.2);
+       box-shadow: 0px 3px 5px rgba(0,0,0,0.2);
+   }
+   #container1{
+    background-color: #f5f5f5; /* Background color for the div */
+    border: 1px solid #ddd; /* Border around the div */
+    padding: 20px; /* Padding inside the div */
+    border-radius: 10px; /* Rounded corners for the div */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Box shadow for a subtle 3D effect */
+    text-align: justify; /* Justify text inside the div */
+    font: 15px/1.5 Helvetica, Arial, sans-serif; /* Font and line height */
+  }
+
+/* Optional: Add margin to separate the div from other elements */
+#container1{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+/* Optional: Add hover effect for interactivity */
+#container1:hover {
+    background-color: #e0e0e0; /* Change background color on hover */
+}
+   </style>
+  </head>
+<body>
+     <div id="container">
+       <div class="photobanner">
+          <img class="first" />
+          <img src="{% static 'assets/img/hero-bg.jpg' %}" alt="test" />
+          <img src="assets/img/favicon.png" alt="1" />
+          <img src="{% static 'assets/img/hero-bg.jpg' %}" alt="2" />
+          <img src="assets/img/favicon.png" alt="3" />
+          <img src="{% static 'assets/img/hero-bg.jpg' %}" alt="4" />
+       
+        </div>
+        </a>
+      </div>
+   <div id="container1">
+       <h1>Welcome to My Attractive Web Page</h1>
+       <img src="your-image.jpg" alt="An attractive image">
+       <div id="container1">
+       <p >St. Joseph’s HSS kodenchery, established in the year 1954, is one of the most prestigious institutions under the Corporate Educational Agency of Thamarassery Diocese. It provides a cutting edge academic programme with state-of-the art infrastructure and facilities. When the school started functioning in 1950 we had only Primary section. In 1954 the school was upgraded as high school. As years passed SJHSS was progressed by leaps and bounds . The school was upgraded as higher Secondary school in 2000.</p>
+       </div>
+   </div>
+     </body>  
+</html>
+{% endblock %}    

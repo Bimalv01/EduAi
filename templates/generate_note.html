@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Note</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 bg-white shadow-sm p-4">
+                <h2>Generate a Note</h2>
+                <form id="noteForm" method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="topic" class="form-label">Topic:</label>
+                        <input type="text" id="topic" name="topic" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="subtopic" class="form-label">Subtopic:</label>
+                        <input type="text" id="subtopic" name="subtopic" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="concept" class="form-label">Concept:</label>
+                        <input type="text" id="concept" name="concept" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="detail_level" class="form-label">Level of Detail:</label>
+                        <select id="detail_level" name="detail_level" class="form-select">
+                            <option value="brief">Brief</option>
+                            <option value="medium">Medium</option>
+                            <option value="detailed">Detailed</option>
+                        </select>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Generate Note</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Main content area -->
+            <div class="col-md-9">
+                <div id="generatedNote" class="mt-4">
+                    <h2 class="text-center">Generated Note:</h2>
+                    <p id="noteContent" class="text-justify"></p>
+                    <div class="d-grid gap-2 mt-3">
+                        <button id="downloadButton" class="btn btn-success d-none">Download Generated Note as PDF</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.getElementById('noteForm').onsubmit = function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(event.target);
+
+            if (formData.get("download") === "pdf") {
+                event.target.submit();
+            } else {
+                fetch("", {
+                    method: "POST",
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("noteContent").textContent = data.note_content;
+                    document.getElementById("downloadButton").classList.remove("d-none");
+                });
+            }
+        };
+
+        document.getElementById("downloadButton").onclick = function() {
+            const formData = new FormData(document.getElementById("noteForm"));
+            formData.set("download", "pdf");
+            fetch("", {
+                method: "POST",
+                body: formData,
+            })
+            .then(response => response.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.style.display = "none";
+                a.href = url;
+                a.download = "generated_note.pdf";
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            });
+        };
+    </script>
+</body>
+</html>

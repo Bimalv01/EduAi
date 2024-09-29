@@ -1,0 +1,71 @@
+<!-- material_search_results.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Material Search Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            text-align: center;
+            color: #0074b8;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        li img {
+            width: 100%;
+            height: auto;
+            margin-top: 10px;
+        }
+
+        p {
+            text-align: center;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h2>Material Search Results</h2>
+    {% if materials %}
+        <ul>
+            {% for material in materials %}
+                <li>
+                    
+                        <strong>Subject: {{ material.subject_name }}</strong><br>
+                        Year: {{ material.year }}<br>
+                        Course: {{ material.course }}<br>
+                        <!-- Add more details if needed -->
+                    
+                    <!-- Display other details or provide download links if needed -->
+                    <a href="{{ material.upload.url }}" download>
+                        <img src="{{ material.upload.url }}">
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No materials found.</p>
+    {% endif %}
+</body>
+</html>

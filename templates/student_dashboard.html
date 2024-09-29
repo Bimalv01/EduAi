@@ -1,0 +1,225 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Dashboard</title>
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+            color: #333;
+        }
+
+        .top-menu {
+            height: 59px;
+            background-color: skyblue;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .college-logo {
+            max-height: 100%;
+        }
+
+        .student-details {
+            display: flex;
+            align-items: center;
+        }
+
+        .student-info {
+            margin-right: 20px;
+        }
+
+        .sidenav {
+            height: calc(100vh - 59px);
+            width: 220px;
+            position: fixed;
+            z-index: 1;
+            top: 59px;
+            left: 0;
+            background-color: #333;
+            overflow-y: auto;
+            transition: 0.5s;
+            padding-top: 20px;
+            color: white;
+        }
+
+        .sidenav a {
+            padding: 10px 16px;
+            text-decoration: none;
+            font-size: 16px;
+            color: white;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidenav a:hover {
+            background-color: #555;
+        }
+
+        .dashboard {
+            margin-top: 59px;
+            padding: 20px;
+            margin-left: 220px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .student-profile {
+            flex: 0 0 calc(25% - 20px);
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            background-color: white;
+            text-align: center;
+        }
+
+        .student-profile img {
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            margin-bottom: 10px;
+        }
+
+        .student-profile button {
+            background-color: skyblue;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 5px;
+        }
+
+        .student-profile button:hover {
+            background-color: lightblue;
+        }
+
+        table {
+            flex: 1;
+            width: calc(75% - 20px);
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: skyblue;
+            color: white;
+        }
+
+        @media only screen and (max-width: 768px) {
+            .sidenav {
+                width: 100%;
+            }
+
+            .student-profile {
+                flex: 0 0 100%;
+            }
+
+            table {
+                width: 100%;
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-menu">
+        <img src="https://www.corporateschoolstsy.org/applications/img/logo-btm.png" alt="schoolLogo" class="college-logo">
+        <div class="student-details">
+            <div class="student-info">
+                <p>{{ student.name }}  - {{ student.roll_number }}</p>
+            </div>
+            <img src="{{ student.student_image.url }}" alt="{{ student.name }}" style="border-radius: 50%; width: 40px; height: 40px;">
+        </div>
+    </div>
+
+    <div class="sidenav">
+        <a href="{% url 'index' %}">Home</a>
+        <a href="{% url 'generate_note' %}">Ai Note maker</a>
+        <a href="{% url 'upload_view' %}">Ai Note Helper</a>
+        <a href="{% url 'chat_view' %}">chat with Gemini</a>
+        <a href='/edit_student/{{student.id}}'>Edit Profile</a>
+        <a href="{% url 'feedback_form' %}?student_id={{ student.id }}">Feedback Form</a>
+        <a href="{% url 'logout_view' %}">Logout</a>
+    </div>
+
+    <div class="dashboard">
+        <div class="student-profile">
+            {% if student.student_image %}
+            <img src="{{ student.student_image.url }}" alt="{{ student.name }}">
+            {% else %}
+            <img src="https://via.placeholder.com/100" alt="Student Image">
+            {% endif %}
+            <h2>{{ student.name }}</h2>
+            <p>Roll Number: {{ student.roll_number }}</p>
+            <p>Course: {{ student.get_course_display }}</p>
+        </div>
+        <table>
+            <caption>Timetable</caption>
+            <tr>
+                <th>Day</th>
+                <th>9:00 - 10:00</th>
+                <th>10:00 - 11:00</th>
+                <th>11:00 - 12:00</th>
+                <th>12:00 - 1:00</th>
+                <th>1:00 - 2:00</th>
+                <th>2:00 - 3:00</th>
+                <th>3:00 - 4:00</th>
+            </tr>
+            {% for day_index in timetable %}
+            <tr>
+                <td>
+                    {% if forloop.counter0 == 0 %} Monday
+                    {% elif forloop.counter0 == 1 %} Tuesday
+                    {% elif forloop.counter0 == 2 %} Wednesday
+                    {% elif forloop.counter0 == 3 %} Thursday
+                    {% elif forloop.counter0 == 4 %} Friday
+                    {% endif %}
+                </td>
+                {% for class in day_index %}
+                <td>{{ class }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+        <!-- Teachers in the same department -->
+        <table class="teachers-table">
+            <caption>Teachers in Your Department</caption>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Contact</th>
+            </tr>
+            {% for teacher in teachers %}
+            <tr>
+                <td>{{ teacher.name }}</td>
+                <td>
+                    <a href="mailto:{{ teacher.email }}?subject=Query from Student">
+                        {{ teacher.email }}
+                    </a>
+                </td>                
+                <td>{{ teacher.contact_number }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center">No teachers found for your course.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>  
+</body>
+</html>

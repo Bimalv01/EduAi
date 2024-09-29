@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Analysis</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            color: #343a40;
+            margin-bottom: 20px;
+        }
+        .table {
+            margin-top: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .table th, .table td {
+            text-align: center;
+            vertical-align: middle;
+        }
+        .table thead {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+        .canvas-container {
+            margin-top: 20px;
+        }
+        .chart-container {
+            position: relative;
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Teacher Feedback Analysis</h1>
+        
+        <div class="row">
+            <div class="col-md-12">
+                <button class="btn btn-primary mb-3" onclick="downloadCSV()">Download CSV</button>
+            </div>
+        </div>
+        
+        <div class="row canvas-container">
+            <div class="col-md-12 chart-container">
+                <canvas id="performanceChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Teacher</th>
+                            <th>Average Performance Score</th>
+                            <th>Positive Feedback Sentiment</th>
+                            <th>Areas for Improvement Sentiment</th>
+                            <th>Additional Comments Sentiment</th>
+                            <th>Composite Sentiment Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in results %}
+                        <tr>
+                            <td>{{ result.teacher }}</td>
+                            <td>{{ result.avg_performance_score }}</td>
+                            <td>{{ result.positive_feedback_sentiment }}</td>
+                            <td>{{ result.areas_for_improvement_sentiment }}</td>
+                            <td>{{ result.additional_comments_sentiment }}</td>
+                            <td>{{ result.composite_sentiment_score }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Prepare data for Chart.js
+        const labels = {{ labels|safe }};
+        const avgPerformanceScores = {{ avg_performance_scores|safe }};
+        const compositeSentimentScores = {{ composite_sentiment_scores|safe }};
+
+        // Create a chart
+        const ctx = document.getElementById('performanceChart').getContext('2d');
+        const performanceChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Average Performance Score',
+                        data: avgPerformanceScores,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Composite Sentiment Score',
+                        data: compositeSentimentScores,
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Function to handle CSV download
+        function downloadCSV() {
+            window.location.href = "{% url 'feedback_analysis' %}?download_csv=true";
+        }
+    </script>
+</body>
+</html>

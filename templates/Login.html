@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Page</title>
+    <style>
+        /* Add your CSS rules here */
+        body {
+            {% comment %} background-image:url('https://www.corporateschoolstsy.org/cst_banners/school_jpg_06Jul2021193148.jpg');
+            background-size:cover; {% endcomment %}
+            background-color: #f2f2f2;
+            
+        }
+        .container {
+            margin: 0 auto;
+            width: 20%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+  
+</head>
+<body>
+    <li><a  href="{% url 'index' %}" style="text-decoration: none; background-color: #3a75c1; color: white; padding: 10px 20px; border-radius: 5px; transition: background-color 0.3s; display: inline-block; margin-top: 20px; text-align: center; font-weight: bold;">
+        back</a> </li>
+    <div class="container">
+        <h2>Admin Login</h2>
+        <form method="post" action="{% url 'Login' %}">
+            {% csrf_token %}
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <center><input type="submit" value="Login">
+            {% if error_message %}
+            <p class="error">{{ error_message }}</p>
+            {% endif %}</center>
+        </form>
+    </div>
+</body>
+</html>

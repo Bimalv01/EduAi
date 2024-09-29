@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with Gemini</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            height: 100vh;
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .sidebar {
+            width: 400px;
+            padding: 20px;
+            background-color: #fff;
+            border-right: 1px solid #dee2e6;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .main-area {
+            flex: 1;
+            padding: 20px;
+            background-color: #ffffff;
+        }
+        h1 {
+            font-size: 1.5rem;
+            color: #343a40;
+        }
+        h2 {
+            font-size: 1.25rem;
+            color: #007bff;
+        }
+        .file-info {
+            margin-top: 10px;
+            color: #6c757d;
+        }
+        button {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h1 class="h4">Chat with Gemini</h1>
+        <form id="chatForm" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="file">Upload File</label>
+                {{ form.file }}
+                <div class="file-info" id="fileInfo"></div>
+            </div>
+            <div class="form-group">
+                <label for="question">Your Question</label>
+                {{ form.question }}
+            </div>
+            <button type="submit" class="btn btn-primary">Send</button>
+        </form>
+    </div>
+
+    <div class="main-area">
+        {% if response_text %}
+            <h2 class="h5">Response from Gemini:</h2>
+            <p>{{ response_text }}</p>
+        {% endif %}
+    </div>
+
+    <script>
+        const fileInput = document.querySelector('input[type="file"]');
+        const fileInfo = document.getElementById('fileInfo');
+
+        // Display file name when selected
+        if (fileInput) {
+            fileInput.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    fileInfo.textContent = `File selected: ${this.files[0].name}`;
+                } else {
+                    fileInfo.textContent = '';
+                }
+            });
+        }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
