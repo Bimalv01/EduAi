@@ -87,6 +87,14 @@ DATABASES = {
     }
 }
 
+import nltk
+from django.core.exceptions import ImproperlyConfigured
+
+# Check for VADER lexicon
+try:
+    nltk.data.find('sentiment/vader_lexicon.zip')
+except LookupError:
+    nltk.download('vader_lexicon')
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -140,4 +148,4 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 EMAIL_HOST_USER = 'bimalbabu720@gmail.com'
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
