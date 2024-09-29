@@ -604,7 +604,7 @@ def teacher_dashboard(request, teacher_id):
 
     return render(request, 'teacher_dashboard.html', context)
 
-
+#AIzaSyANJULnEd9LQDLpGVswoofTtzHGIUCpXQs
 
 #note maker
 client = Groq(api_key="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")
